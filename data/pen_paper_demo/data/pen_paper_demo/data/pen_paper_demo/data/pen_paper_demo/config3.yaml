@@ -1,0 +1,105 @@
+%YAML:1.2
+RealSenseColorCamera:
+  - name: color_camera
+    metafile_path: config3.yaml
+
+RealSenseDepthCamera:
+  - name: depth_camera
+    metafile_path: config3.yaml
+
+NormalColorViewer:
+  - name: color_viewer
+    metafile_path: config3.yaml
+    color_camera: color_camera
+    renderer_geometry: renderer_geometry
+
+NormalDepthViewer:
+  - name: depth_viewer
+    metafile_path: config3.yaml
+    depth_camera: depth_camera
+    renderer_geometry: renderer_geometry
+
+RendererGeometry:
+  - name: renderer_geometry
+    bodies: [watch]
+
+FocusedSilhouetteRenderer:
+  - name: silhouette_renderer_texture
+    renderer_geometry: renderer_geometry
+    camera: color_camera
+    referenced_bodies: [watch]
+
+Body:
+  - name: watch
+    metafile_path: watch_body.yaml
+
+RegionModel:
+  - name: watch_region_model
+    metafile_path: default_model.yaml
+    body: watch
+
+
+DepthModel:
+  - name: watch_depth_model
+    metafile_path: default_model.yaml
+    body: watch
+
+RegionModality:
+  - name: watch_region_modality
+    metafile_path: config3.yaml
+    body: watch
+    color_camera: color_camera
+    region_model: watch_region_model
+    measure_occlusions: {depth_camera: depth_camera}
+
+
+DepthModality:
+  - name: watch_depth_modality
+    metafile_path: config3.yaml
+    body: watch
+    depth_camera: depth_camera
+    depth_model: watch_depth_model
+
+
+TextureModality:
+  - name: watch_texture_modality
+    metafile_path: config3.yaml
+    body: watch
+    color_camera: color_camera
+    focused_silhouette_renderer: silhouette_renderer_texture
+    measure_occlusions: {depth_camera: depth_camera}
+
+Link:
+  - name: watch_link
+    body: watch
+    modalities: [watch_region_modality, watch_depth_modality]
+
+Optimizer:
+  - name: watch_optimizer
+    root_link: watch_link
+
+
+StaticDetector:
+  - name: watch_detector
+    metafile_path: watch_detector.yaml
+    optimizer: watch_optimizer
+
+
+Tracker:
+  - name: tracker
+    metafile_path: config3.yaml
+    viewers: [color_viewer, depth_viewer]
+    detectors: [watch_detector]
+    optimizers: [watch_optimizer]
+
+depth_offset: -0.013
+measure_occlusions: 1
+measured_occlusion_threshold: 0.01
+
+# visualization_time: 1
+# visualize_correspondences_correspondence: 1
+# visualize_lines_correspondence: 1
+# min_depth: 0.2
+# max_depth: 0.5
+# visualization_min_depth: 0.2
+# visualization_max_depth: 0.5

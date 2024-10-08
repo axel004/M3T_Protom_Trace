@@ -1,0 +1,151 @@
+%YAML:1.2
+RealSenseColorCamera:
+  - name: color_camera
+    metafile_path: calibro_config_test.yaml
+
+RealSenseDepthCamera:
+  - name: depth_camera
+    metafile_path: calibro_config_test.yaml
+
+NormalColorViewer:
+  - name: color_viewer
+    metafile_path: normal_viewer.yaml
+    color_camera: color_camera
+    renderer_geometry: renderer_geometry
+
+NormalDepthViewer:
+  - name: depth_viewer
+    metafile_path: depth_viewer.yaml
+    depth_camera: depth_camera
+    renderer_geometry: renderer_geometry
+
+RendererGeometry:
+  - name: renderer_geometry
+    bodies: [calibro, calibroA, calibroB, rondella]
+
+FocusedSilhouetteRenderer:
+  - name: silhouette_renderer_texture
+    renderer_geometry: renderer_geometry
+    camera: color_camera
+    referenced_bodies: [calibro, rondella]
+
+Body:
+  - name: calibro
+    metafile_path: calibro_body.yaml
+  - name: calibroA
+    metafile_path: calibro_body.yaml
+  - name: calibroB
+    metafile_path: calibro_body.yaml
+  - name: rondella
+    metafile_path: rondella_body.yaml
+
+RegionModel:
+  - name: calibroA_region_model
+    metafile_path: default_model.yaml
+    body: calibroA
+    fixed_same_region_body_ptrs: [calibro]
+  - name: calibroB_region_model
+    metafile_path: default_model.yaml
+    body: calibroB
+    fixed_same_region_body_ptrs: [calibro]
+  - name: rondella_region_model
+    metafile_path: default_model.yaml
+    body: rondella
+
+DepthModel:
+  - name: calibro_depth_model
+    metafile_path: default_model.yaml
+    body: calibro
+  - name: rondella_depth_model
+    metafile_path: default_model.yaml
+    body: rondella
+
+RegionModality:
+  - name: calibroA_region_modality
+    metafile_path: calibro_region_modality.yaml
+    body: calibro
+    color_camera: color_camera
+    region_model: calibroA_region_model
+    measure_occlusions: {depth_camera: depth_camera}
+  - name: calibroB_region_modality
+    metafile_path: calibro_region_modality.yaml
+    body: calibro
+    color_camera: color_camera
+    region_model: calibroB_region_model
+    measure_occlusions: {depth_camera: depth_camera}
+  - name: rondella_region_modality
+    metafile_path: rondella_region_modality.yaml
+    body: rondella
+    color_camera: color_camera
+    region_model: rondella_region_model
+    measure_occlusions: {depth_camera: depth_camera}
+
+DepthModality:
+  - name: rondella_depth_modality
+    metafile_path: rondella_depth_modality.yaml
+    body: rondella
+    depth_camera: depth_camera
+    depth_model: rondella_depth_model
+  - name: calibro_depth_modality
+    metafile_path: calibro_depth_modality.yaml
+    body: calibro
+    depth_camera: depth_camera
+    depth_model: calibro_depth_model
+
+TextureModality:
+  - name: calibro_texture_modality
+    metafile_path: calibro_texture_modality.yaml
+    body: calibro
+    color_camera: color_camera
+    focused_silhouette_renderer: silhouette_renderer_texture
+    measure_occlusions: {depth_camera: depth_camera}
+
+Link:
+ - name: calibroA_link
+    metafile_path: linkA.yaml
+    body: calibroA
+    modalities: [calibroA_region_modality]
+  - name: calibroB_link
+    body: calibroB
+    metafile_path: linkB.yaml
+    modalities: [calibroB_region_modality]
+  - name: calibro_link
+    body: calibro
+    modalities: [calibro_region_modality, calibro_texture_modality, calibro_depth_modality]  
+    child_links: [calibroA_link, calibroB_link]
+  - name: rondella_link
+    body: rondella
+    modalities: [rondella_region_modality, rondella_depth_modality]
+
+Optimizer:
+  - name: calibro_optimizer
+    root_link: calibro_link
+  - name: rondella_optimizer
+    root_link: rondella_link
+
+StaticDetector:
+  - name: calibro_detector
+    metafile_path: calibro_detector.yaml
+    optimizer: calibro_optimizer
+  - name: rondella_detector
+    metafile_path: rondella_detector.yaml
+    optimizer: rondella_optimizer
+
+Tracker:
+  - name: tracker
+    metafile_path: calibro_tracker.yaml
+    viewers: [color_viewer, depth_viewer]
+    detectors: [calibro_detector, rondella_detector]
+    optimizers: [calibro_optimizer, rondella_optimizer]
+
+depth_offset: -0.013
+measure_occlusions: 1
+measured_occlusion_threshold: 0.01
+
+ #visualization_time: 1
+ #visualize_correspondences_correspondence: 1
+ #visualize_lines_correspondence: 1
+ #min_depth: 0.2
+ #max_depth: 0.5
+ #visualization_min_depth: 0.2
+ #visualization_max_depth: 0.5

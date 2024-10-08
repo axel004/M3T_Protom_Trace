@@ -1,0 +1,5 @@
+%YAML:1.2
+save_images: 0
+save_directory: frames
+save_image_type: png
+display_images: 0

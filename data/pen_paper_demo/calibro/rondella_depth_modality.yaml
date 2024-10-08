@@ -1,0 +1,18 @@
+%YAML:1.2
+use_adaptive_coverage: 1
+use_depth_scaling: 1
+measured_occlusion_threshold: 0.01
+measure_occlusions: 1
+use_depth_scaling: 0
+visualize_pose_result: 1
+#visualize_lines_correspondence: 1
+#visualize_points_correspondence: 1
+#visualize_points_depth_image_correspondence: 1	
+#visualize_points_depth_rendering_correspondence: 1	
+#visualize_points_silhouette_rendering_correspondence: 1	
+#visualize_points_optimization: 1
+#visualize_points_histogram_image_optimization: 1
+#visualize_points_result: 1
+#visualize_points_histogram_image_result: 1	
+#visualization_min_depth: 1
+#visualization_max_depth: 1

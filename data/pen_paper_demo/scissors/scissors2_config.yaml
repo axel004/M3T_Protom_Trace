@@ -1,0 +1,112 @@
+%YAML:1.2
+RealSenseColorCamera:
+  - name: color_camera
+    metafile_path: scissors2_config.yaml
+RealSenseDepthCamera:
+  - name: depth_camera
+    metafile_path: scissors2_config.yaml
+
+NormalColorViewer:
+  - name: color_viewer
+    metafile_path: scissors2_config.yaml
+    color_camera: color_camera
+    renderer_geometry: renderer_geometry
+
+NormalDepthViewer:
+  - name: depth_viewer
+    metafile_path: scissors2_config.yaml
+    depth_camera: depth_camera
+    renderer_geometry: renderer_geometry
+
+RendererGeometry:
+  - name: renderer_geometry
+    bodies: [scissors]
+
+FocusedSilhouetteRenderer:
+  - name: silhouette_renderer_texture
+    renderer_geometry: renderer_geometry
+    camera: color_camera
+    referenced_bodies: [scissors]
+
+Body:
+  - name: scissors
+    metafile_path: scissors_body.yaml
+
+RegionModel:
+  - name: scissors_region_model
+    metafile_path: scissors_model.yaml
+    body: scissors
+
+
+DepthModel:
+  - name: scissors_depth_model
+    metafile_path: scissors_model.yaml
+    body: scissors
+
+RegionModality:
+  - name: scissors_region_modality
+    metafile_path: "C:/Users/Alessandro Rastelli/Desktop/3DObjectTracking-master-vcpkg/M3T/data/pen_paper_demo/scissors/scissors_region_modality.yaml"
+    body: scissors
+    color_camera: color_camera
+    region_model: scissors_region_model
+    measure_occlusions: {depth_camera: depth_camera}
+
+
+DepthModality:
+  - name: scissors_depth_modality
+    metafile_path: scissors2_config.yaml
+    body: scissors
+    depth_camera: depth_camera
+    depth_model: scissors_depth_model
+
+
+TextureModality:
+  - name: scissors_texture_modality
+    metafile_path: scissors2_config.yaml
+    body: scissors
+    color_camera: color_camera
+    focused_silhouette_renderer: silhouette_renderer_texture
+    measure_occlusions: {depth_camera: depth_camera}
+
+Link:
+  - name: scissors_link
+    body: scissors
+    modalities: [scissors_region_modality, scissors_depth_modality, scissors_texture_modality]
+
+Optimizer:
+  - name: scissors_optimizer
+    root_link: scissors_link
+
+
+StaticDetector:
+  - name: scissors_detector
+    metafile_path: scissors_detector.yaml
+    optimizer: scissors_optimizer
+
+
+Tracker:
+  - name: tracker
+    metafile_path: scissors2_config.yaml
+    viewers: [color_viewer, depth_viewer]
+    detectors: [scissors_detector]
+    optimizers: [scissors_optimizer]
+
+depth_offset: -0.013
+measure_occlusions: 1
+measured_occlusion_threshold: 0.01
+
+#save_images: true
+#save_directory: "C:/Users/Alessandro Rastelli/Desktop/3DObjectTracking-master-vcpkg/M3T/data/pen_paper_demo/scissors/scissors_frames"
+#save_index: 0
+#save_image_type: "png"
+
+#save_coordinates: true
+#save_directory_coordinates: "C:/Users/Alessandro Rastelli/Desktop/3DObjectTracking-master-vcpkg/M3T/data/pen_paper_demo/scissors/scissors.csv"
+
+#visualization_time: 1
+#visualize_correspondences_correspondence: 1
+#visualize_lines_correspondence: 1
+#min_depth: 0.2
+#max_depth: 0.5
+#visualization_min_depth: 0.2
+#visualization_max_depth: 0.5

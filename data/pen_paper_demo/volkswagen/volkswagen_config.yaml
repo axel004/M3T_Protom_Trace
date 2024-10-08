@@ -1,0 +1,105 @@
+%YAML:1.2
+RealSenseColorCamera:
+  - name: color_camera
+    metafile_path: volkswagen_config.yaml
+
+RealSenseDepthCamera:
+  - name: depth_camera
+    metafile_path: volkswagen_config.yaml
+
+NormalColorViewer:
+  - name: color_viewer
+    metafile_path: volkswagen_config.yaml
+    color_camera: color_camera
+    renderer_geometry: renderer_geometry
+
+NormalDepthViewer:
+  - name: depth_viewer
+    metafile_path: volkswagen_config.yaml
+    depth_camera: depth_camera
+    renderer_geometry: renderer_geometry
+
+RendererGeometry:
+  - name: renderer_geometry
+    bodies: [volkswagen]
+
+FocusedSilhouetteRenderer:
+  - name: silhouette_renderer_texture
+    renderer_geometry: renderer_geometry
+    camera: color_camera
+    referenced_bodies: [volkswagen]
+
+Body:
+  - name: volkswagen
+    metafile_path: volkswagen_body.yaml
+
+RegionModel:
+  - name: volkswagen_region_model
+    metafile_path: "C:/Users/Alessandro Rastelli/Desktop/3DObjectTracking-master-vcpkg/M3T/data/pen_paper_demo/volkswagen/volkswagen_model.yaml"
+    body: volkswagen
+
+
+DepthModel:
+  - name: volkswagen_depth_model
+    metafile_path: "C:/Users/Alessandro Rastelli/Desktop/3DObjectTracking-master-vcpkg/M3T/data/pen_paper_demo/volkswagen/volkswagen_model.yaml"
+    body: volkswagen
+
+RegionModality:
+  - name: volkswagen_region_modality
+    metafile_path: "C:/Users/Alessandro Rastelli/Desktop/3DObjectTracking-master-vcpkg/M3T/data/pen_paper_demo/volkswagen/volkswagen_region_modality.yaml"
+    body: volkswagen
+    color_camera: color_camera
+    region_model: volkswagen_region_model
+    measure_occlusions: {depth_camera: depth_camera}
+
+
+DepthModality:
+  - name: volkswagen_depth_modality
+    metafile_path: volkswagen_config.yaml
+    body: volkswagen
+    depth_camera: depth_camera
+    depth_model: volkswagen_depth_model
+
+
+TextureModality:
+  - name: volkswagen_texture_modality
+    metafile_path: volkswagen_config.yaml
+    body: volkswagen
+    color_camera: color_camera
+    focused_silhouette_renderer: silhouette_renderer_texture
+    measure_occlusions: {depth_camera: depth_camera}
+
+Link:
+  - name: volkswagen_link
+    body: volkswagen
+    modalities: [volkswagen_region_modality, volkswagen_depth_modality, volkswagen_texture_modality]
+
+Optimizer:
+  - name: volkswagen_optimizer
+    root_link: volkswagen_link
+
+
+StaticDetector:
+  - name: volkswagen_detector
+    metafile_path: volkswagen_detector.yaml
+    optimizer: volkswagen_optimizer
+
+
+Tracker:
+  - name: tracker
+    metafile_path: volkswagen_config.yaml
+    viewers: [color_viewer, depth_viewer]
+    detectors: [volkswagen_detector]
+    optimizers: [volkswagen_optimizer]
+
+depth_offset: -0.013
+measure_occlusions: 1
+measured_occlusion_threshold: 0.01
+
+# visualization_time: 1
+# visualize_correspondences_correspondence: 1
+# visualize_lines_correspondence: 1
+# min_depth: 0.2
+# max_depth: 0.5
+# visualization_min_depth: 0.2
+# visualization_max_depth: 0.5

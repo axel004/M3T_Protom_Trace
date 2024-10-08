@@ -1,0 +1,133 @@
+%YAML:1.2
+RealSenseColorCamera:
+  - name: color_camera
+    metafile_path: bottle_box_config.yaml
+
+RealSenseDepthCamera:
+  - name: depth_camera
+    metafile_path: bottle_box_config.yaml
+
+NormalColorViewer:
+  - name: color_viewer
+    metafile_path: bottle_box_config.yaml
+    color_camera: color_camera
+    renderer_geometry: renderer_geometry
+
+NormalDepthViewer:
+  - name: depth_viewer
+    metafile_path: bottle_box_config.yaml
+    depth_camera: depth_camera
+    renderer_geometry: renderer_geometry
+
+RendererGeometry:
+  - name: renderer_geometry
+    bodies: [box, bottle]
+
+FocusedSilhouetteRenderer:
+  - name: silhouette_renderer_texture
+    renderer_geometry: renderer_geometry
+    camera: color_camera
+    referenced_bodies: [box, bottle]
+
+Body:
+  - name: box
+    metafile_path: "C:/Users/Alessandro Rastelli/Desktop/3DObjectTracking-master-vcpkg/M3T/data/pen_paper_demo/box/box_body.yaml"
+  - name: bottle
+    metafile_path: "C:/Users/Alessandro Rastelli/Desktop/3DObjectTracking-master-vcpkg/M3T/data/pen_paper_demo/bottle/bottle_body.yaml"
+
+RegionModel:
+  - name: box_region_model
+    metafile_path:  "C:/Users/Alessandro Rastelli/Desktop/3DObjectTracking-master-vcpkg/M3T/data/pen_paper_demo/box/box_model.yaml"
+    body: box
+  - name: bottle_region_model
+    metafile_path: "C:/Users/Alessandro Rastelli/Desktop/3DObjectTracking-master-vcpkg/M3T/data/pen_paper_demo/bottle/bottle_model.yaml"
+    body: bottle
+
+DepthModel:
+  - name: box_depth_model
+    metafile_path: "C:/Users/Alessandro Rastelli/Desktop/3DObjectTracking-master-vcpkg/M3T/data/pen_paper_demo/box/box_model.yaml"
+    body: box
+  - name: bottle_depth_model
+    metafile_path: "C:/Users/Alessandro Rastelli/Desktop/3DObjectTracking-master-vcpkg/M3T/data/pen_paper_demo/bottle/bottle_model.yaml"
+    body: bottle
+
+RegionModality:
+  - name: box_region_modality
+    metafile_path: "C:/Users/Alessandro Rastelli/Desktop/3DObjectTracking-master-vcpkg/M3T/data/pen_paper_demo/box/box_region_modality.yaml"
+    body: box
+    color_camera: color_camera
+    region_model: box_region_model
+    measure_occlusions: {depth_camera: depth_camera}
+  - name: bottle_region_modality
+    metafile_path: "C:/Users/Alessandro Rastelli/Desktop/3DObjectTracking-master-vcpkg/M3T/data/pen_paper_demo/bottle/bottle_region_modality.yaml"
+    body: bottle
+    color_camera: color_camera
+    region_model: bottle_region_model
+    measure_occlusions: {depth_camera: depth_camera}
+
+DepthModality:
+  - name: box_depth_modality
+    metafile_path: bottle_box_config.yaml
+    body: box
+    depth_camera: depth_camera
+    depth_model: box_depth_model
+  - name: bottle_depth_modality
+    metafile_path: bottle_box_config.yaml
+    body: bottle
+    depth_camera: depth_camera
+    depth_model: bottle_depth_model
+
+TextureModality:
+  - name: box_texture_modality
+    metafile_path: bottle_box_config.yaml
+    body: box
+    color_camera: color_camera
+    focused_silhouette_renderer: silhouette_renderer_texture
+    measure_occlusions: {depth_camera: depth_camera}
+  - name: bottle_texture_modality
+    metafile_path: bottle_box_config.yaml
+    body: bottle
+    color_camera: color_camera
+    focused_silhouette_renderer: silhouette_renderer_texture
+    measure_occlusions: {depth_camera: depth_camera}
+
+Link:
+  - name: box_link
+    body: box
+    modalities: [box_region_modality, box_texture_modality, box_depth_modality]    #optional
+  - name: bottle_link
+    body: bottle
+    modalities: [bottle_region_modality,bottle_texture_modality, bottle_depth_modality]
+
+Optimizer:
+  - name: box_optimizer
+    root_link: box_link
+  - name: bottle_optimizer
+    root_link: bottle_link
+
+StaticDetector:
+  - name: box_detector
+    metafile_path: "C:/Users/Alessandro Rastelli/Desktop/3DObjectTracking-master-vcpkg/M3T/data/pen_paper_demo/box/box_detector.yaml"
+    optimizer: box_optimizer
+  - name: bottle_detector
+    metafile_path: "C:/Users/Alessandro Rastelli/Desktop/3DObjectTracking-master-vcpkg/M3T/data/pen_paper_demo/bottle/bottle_detector.yaml"
+    optimizer: bottle_optimizer
+
+Tracker:
+  - name: tracker
+    metafile_path: bottle_box_config.yaml
+    viewers: [color_viewer, depth_viewer]
+    detectors: [box_detector, bottle_detector]
+    optimizers: [box_optimizer, bottle_optimizer]
+
+depth_offset: -0.013
+measure_occlusions: 1
+measured_occlusion_threshold: 0.01
+
+ #visualization_time: 1
+ #visualize_correspondences_correspondence: 1
+ #visualize_lines_correspondence: 1
+ #min_depth: 0.2
+ #max_depth: 0.5
+ #visualization_min_depth: 0.2
+ #visualization_max_depth: 0.5

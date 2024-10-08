@@ -1,0 +1,5 @@
+%YAML:1.2
+model_path: "INFER_FROM_NAME"
+sphere_radius: 0.8
+n_divides: 4
+n_points: 500

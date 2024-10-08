@@ -1,0 +1,21 @@
+%YAML:1.2
+use_adaptive_coverage: 1
+reference_contour_length: 0.23
+measured_occlusion_threshold: 0.01
+n_histogram_bins: 32
+learning_rate_f: 0.5
+learning_rate_b: 0.5
+#visualize_gradient_optimization: 1
+#visualize_hessian_optimization: 1
+visualize_pose_result: 0
+#visualize_lines_correspondence: 1
+#visualize_points_correspondence: 1
+#visualize_points_depth_image_correspondence: 1	
+#visualize_points_depth_rendering_correspondence: 1	
+#visualize_points_silhouette_rendering_correspondence: 1	
+#visualize_points_optimization: 1
+#visualize_points_histogram_image_optimization: 1
+#visualize_points_result: 1
+#visualize_points_histogram_image_result: 1	
+#visualization_min_depth: 1
+#visualization_max_depth: 1

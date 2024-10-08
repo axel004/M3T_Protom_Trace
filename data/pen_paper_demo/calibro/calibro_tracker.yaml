@@ -1,0 +1,8 @@
+%YAML:1.2
+n_corr_iterations: 7
+n_update_iterations: 3
+visualization_time: 2
+start_tracking_after_detection: 0
+#viewer_time: 2
+#synchronize_cameras: 0
+#cycle_duration: 5000 
